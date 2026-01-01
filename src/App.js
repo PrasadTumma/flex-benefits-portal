@@ -1,10 +1,9 @@
-import React from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import FlexBenefitsPage from "./routes/FlexBenefitsPage";
 
 const App = () => {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const isLoggedIn = localStorage.getItem("eb360_logged_in") === "true";
 
   return (
     <HashRouter>
