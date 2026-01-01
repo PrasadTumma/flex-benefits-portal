@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/PrasadTumma/flex-benefits-portal/static/css/main.e6c13ad2.css",
+    "main.js": "/PrasadTumma/flex-benefits-portal/static/js/main.48409ef9.js",
+    "static/js/453.b2abdca8.chunk.js": "/PrasadTumma/flex-benefits-portal/static/js/453.b2abdca8.chunk.js",
+    "static/media/top-up-health-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/top-up-health-ins-2.edb592ca431f22deb129.png",
+    "static/media/opd-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/opd-ins-2.16a5310e529d8ab0873d.png",
+    "static/media/term-life-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/term-life-ins-2.89bb6c24ee649a60aa40.png",
+    "static/media/car-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/car-ins-2.e68cfbd17bf8717ebe3f.png",
+    "static/media/bike-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/bike-ins-2.27aef3f398cf7f3380e5.png",
+    "static/media/women-c-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/women-c-ins-2.b9dadce9cb81ad37ba3d.png",
+    "static/media/health-ins-2.png": "/PrasadTumma/flex-benefits-portal/static/media/health-ins-2.ad10e695cb8ce3c61d81.png",
+    "static/media/gym-pass.png": "/PrasadTumma/flex-benefits-portal/static/media/gym-pass.f480b4cde3d4abaecf4e.png",
+    "static/media/nutri-connect.png": "/PrasadTumma/flex-benefits-portal/static/media/nutri-connect.f8fff3eba045fe05b75e.png",
+    "static/media/yoga.png": "/PrasadTumma/flex-benefits-portal/static/media/yoga.7de003a07060156cda3f.png",
+    "static/media/health-checkup.png": "/PrasadTumma/flex-benefits-portal/static/media/health-checkup.45121e3c124af02ad4dc.png",
+    "static/media/parents.svg": "/PrasadTumma/flex-benefits-portal/static/media/parents.105e9711346b2acfbad35e3e11351e8d.svg",
+    "static/media/eb360-logo.svg": "/PrasadTumma/flex-benefits-portal/static/media/eb360-logo.5e992ceeb4e2ab9d52c2947ddacb5240.svg",
+    "static/media/accident.svg": "/PrasadTumma/flex-benefits-portal/static/media/accident.f81e3a9f874f933a5d54c4023b35c396.svg",
+    "static/media/coin.svg": "/PrasadTumma/flex-benefits-portal/static/media/coin.14ed81de028bf899106b476cee1739d0.svg",
+    "static/media/wallet.svg": "/PrasadTumma/flex-benefits-portal/static/media/wallet.11872da4505f0b70bed631b3b0c94ace.svg",
+    "static/media/health-insurance.svg": "/PrasadTumma/flex-benefits-portal/static/media/health-insurance.cfd36a14a2f55bbfaabd9d1bb9c120d4.svg",
+    "static/media/term-life-ic.svg": "/PrasadTumma/flex-benefits-portal/static/media/term-life-ic.83d1329e53ad2b9c40984bd00578e4c8.svg",
+    "index.html": "/PrasadTumma/flex-benefits-portal/index.html",
+    "main.e6c13ad2.css.map": "/PrasadTumma/flex-benefits-portal/static/css/main.e6c13ad2.css.map",
+    "main.48409ef9.js.map": "/PrasadTumma/flex-benefits-portal/static/js/main.48409ef9.js.map",
+    "453.b2abdca8.chunk.js.map": "/PrasadTumma/flex-benefits-portal/static/js/453.b2abdca8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.48409ef9.js"
+  ]
+}
