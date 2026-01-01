@@ -55,8 +55,8 @@ let runningBalance = coinBalance + totalUsed;
 
 
   const handleLogout = () => {
-    localStorage.removeItem("eb360_logged_in");
-    navigate("/", { replace: true });
+     localStorage.clear();      // clear wallet, cart, client etc
+  window.location.href = "#/";   // hard redirect for GitHub pages
   };
   const employee = CLIENT_EMPLOYEE_MAP[client];
 
