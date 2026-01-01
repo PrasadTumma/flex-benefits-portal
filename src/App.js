@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate , HashRouter} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import FlexBenefitsPage from "./routes/FlexBenefitsPage";
 
@@ -7,7 +7,7 @@ const App = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   return (
-    <BrowserRouter>
+    <HashRouter>
   <Routes>
 
     {/* Login */}
@@ -25,7 +25,7 @@ const App = () => {
     <Route path="*" element={<Navigate to="/" />} />
 
   </Routes>
-</BrowserRouter>
+</HashRouter>
 
   );
 };
