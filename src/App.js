@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate , HashRouter} from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import FlexBenefitsPage from "./routes/FlexBenefitsPage";
 
@@ -7,26 +7,18 @@ const App = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   return (
-<HashRouter basename="/">
-  <Routes>
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
 
-    {/* Login */}
-    <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/dashboard"
+          element={isLoggedIn ? <FlexBenefitsPage /> : <Navigate to="/" />}
+        />
 
-    {/* Protected Dashboard */}
-    <Route
-      path="/dashboard"
-      element={
-        isLoggedIn ? <FlexBenefitsPage /> : <Navigate to="/" />
-      }
-    />
-
-    {/* Fallback */}
-    <Route path="*" element={<Navigate to="/" />} />
-
-  </Routes>
-</HashRouter>
-
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </HashRouter>
   );
 };
 

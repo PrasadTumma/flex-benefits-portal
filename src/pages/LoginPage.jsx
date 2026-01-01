@@ -36,13 +36,15 @@ const [client, setClient] = useState("suzlon");
     setError("");
     setStep("OTP");
   };
+window.location.hash = "#/dashboard";
 
 const handleVerifyOtp = () => {
   if (otp === "123456") {
     localStorage.setItem("eb360_logged_in", "true");
     localStorage.setItem("eb360_client", client);
 
-    navigate("/dashboard", { replace: true });
+    navigate("/dashboard", { replace: true, relative: "route" });
+
   } else {
     alert("Invalid OTP");
   }
