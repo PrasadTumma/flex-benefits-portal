@@ -7,7 +7,7 @@ const App = () => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   return (
-    <HashRouter>
+<HashRouter basename="/">
   <Routes>
 
     {/* Login */}
