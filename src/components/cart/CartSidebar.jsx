@@ -12,6 +12,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useFlexBenefits } from "../../context/FlexBenefitsContext";
 import CoinIcon from "../../assets/images/coin.svg";
+import { Dialog, DialogContent, CircularProgress } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const CartSidebar = () => {
 
@@ -28,6 +30,8 @@ const CartSidebar = () => {
   const wellness = cartItems.filter(x => x.type === "wellness");
   const personal = cartItems.filter(x => x.type === "personal");
   const group = cartItems.filter(x => x.type === "group");
+const [payOpen, setPayOpen] = React.useState(false);
+const [payStep, setPayStep] = React.useState("REDIRECT");
 
 
   return (
@@ -165,11 +169,51 @@ const CartSidebar = () => {
 
 </Stack> */}
 
-        <Button fullWidth variant="contained" sx={{ mt: 2 }}>
-          CONFIRM & PROCEED
-        </Button>
+       <Button
+  fullWidth
+  variant="contained"
+  sx={{ mt: 2, bgcolor:"#003E8C" }}
+  onClick={() => {
+    setPayStep("REDIRECT");
+    setPayOpen(true);
+
+    setTimeout(() => setPayStep("SUCCESS"), 1000);
+    setTimeout(() => {
+      setPayOpen(false);
+      toggleCart();
+    }, 2500);
+  }}
+>
+  CONFIRM & PROCEED
+</Button>
+
 
       </Box>
+
+      <Dialog open={payOpen} maxWidth="xs" fullWidth>
+  <DialogContent sx={{ textAlign:"center", py:5 }}>
+
+    {payStep === "REDIRECT" && (
+      <>
+        <CircularProgress />
+        <Typography mt={2} fontWeight={600}>
+          Redirecting to Payment Gateway...
+        </Typography>
+      </>
+    )}
+
+    {payStep === "SUCCESS" && (
+      <>
+        <CheckCircleIcon sx={{ fontSize:60, color:"#4CAF50" }} />
+        <Typography mt={2} fontWeight={700}>
+          Order Placed Successfully 🎉
+        </Typography>
+      </>
+    )}
+
+  </DialogContent>
+</Dialog>
+
     </Drawer>
   );
 };
