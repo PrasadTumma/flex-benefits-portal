@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/flex-benefits-portal/static/css/main.e6c13ad2.css",
-    "main.js": "/flex-benefits-portal/static/js/main.5cea5507.js",
+    "main.js": "/flex-benefits-portal/static/js/main.cf68cfd0.js",
     "static/js/453.b2abdca8.chunk.js": "/flex-benefits-portal/static/js/453.b2abdca8.chunk.js",
     "static/media/top-up-health-ins-2.png": "/flex-benefits-portal/static/media/top-up-health-ins-2.edb592ca431f22deb129.png",
     "static/media/opd-ins-2.png": "/flex-benefits-portal/static/media/opd-ins-2.16a5310e529d8ab0873d.png",
@@ -23,11 +23,11 @@
     "static/media/term-life-ic.svg": "/flex-benefits-portal/static/media/term-life-ic.83d1329e53ad2b9c40984bd00578e4c8.svg",
     "index.html": "/flex-benefits-portal/index.html",
     "main.e6c13ad2.css.map": "/flex-benefits-portal/static/css/main.e6c13ad2.css.map",
-    "main.5cea5507.js.map": "/flex-benefits-portal/static/js/main.5cea5507.js.map",
+    "main.cf68cfd0.js.map": "/flex-benefits-portal/static/js/main.cf68cfd0.js.map",
     "453.b2abdca8.chunk.js.map": "/flex-benefits-portal/static/js/453.b2abdca8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.5cea5507.js"
+    "static/js/main.cf68cfd0.js"
   ]
 }
