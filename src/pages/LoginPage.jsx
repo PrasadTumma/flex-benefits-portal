@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import EbLogo from "../assets/images/eb360-logo.svg";
 import { CLIENTS } from "../constants/benefitsData";
+import { useEffect } from "react";
 
 
 const LoginPage = () => {
@@ -42,14 +43,22 @@ const handleVerifyOtp = () => {
   if (otp === "123456") {
     localStorage.setItem("eb360_logged_in", "true");
     localStorage.setItem("eb360_client", client);
-    window.location.hash = "#/dashboard";
+    //window.location.hash = "#/dashboard";
 
-    //navigate("/dashboard", { replace: true, relative: "route" });
+    navigate("/dashboard", { replace: true });
+
 
   } else {
     alert("Invalid OTP");
   }
 };
+
+useEffect(() => {
+  const isLoggedIn = localStorage.getItem("eb360_logged_in");
+  if (isLoggedIn === "true") {
+    navigate("/dashboard", { replace: true });
+  }
+}, []);
 
 
   return (
