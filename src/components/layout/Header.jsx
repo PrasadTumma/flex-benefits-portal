@@ -49,8 +49,8 @@ const Header = () => {
   useFlexBenefits();
  
 // Running balance calc
-const totalUsed = coinHistory.reduce((s, x) => s + x.coins, 0);
-let runningBalance = coinBalance + totalUsed;
+// const totalUsed = coinHistory.reduce((s, x) => s + x.coins, 0);
+// let runningBalance = coinBalance + totalUsed;
 
 
 
@@ -212,7 +212,7 @@ let runningBalance = coinBalance + totalUsed;
     >
       <Box flex={1}>{txn.date}</Box>
       <Box flex={2}>{txn.description}</Box>
-      <Box flex={1} color="red">₹{Math.abs(txn.amount)}</Box>
+      <Box flex={1} color="green">₹{Math.abs(txn.amount)}</Box>
       <Box flex={1}>₹{txn.balance}</Box>
     </Stack>
   ))}
@@ -286,17 +286,18 @@ let runningBalance = coinBalance + totalUsed;
   </Typography>
 ) : (
   coinHistory.map(txn => {
-    runningBalance -= txn.coins;
+    
 
     return (
+      
       <Stack key={txn.id} direction="row" fontSize={12} py={0.7}>
-        <Box width="25%">{txn.date}</Box>
-        <Box width="35%">{txn.description}</Box>
-        <Box width="20%" sx={{ color: txn.coins > 0 ? "green" : "red", fontWeight: 600 }}>
-          {txn.coins}
-        </Box>
-        <Box width="20%">{runningBalance}</Box>
-      </Stack>
+    <Box width="25%">{txn.date}</Box>
+    <Box width="35%">{txn.description}</Box>
+    <Box width="20%" color="green">
+      {txn.coins}
+    </Box>
+    <Box width="20%">{txn.balance}</Box>
+  </Stack>
     );
   })
 )}

@@ -10,7 +10,10 @@ const DEFAULT_STATE = {
   coinBalance: 5000,
   cartOpen: false,
   cartItems: [],
+  walletHistory: [],
+  coinHistory: []
 };
+
 
 
 const safeNumber = (v) => {
@@ -20,29 +23,29 @@ const safeNumber = (v) => {
 
 export const FlexBenefitsProvider = ({ children }) => {
   const [state, setState] = useState(DEFAULT_STATE);
-const walletHistory = useMemo(() => {
-  return state.cartItems.map(item => ({
-    id: item.id,
-    date: new Date().toLocaleDateString("en-IN", {
-      day: "2-digit", month: "short", year: "numeric"
-    }),
-    description: item.title,
-    amount: -safeNumber(item.price),
-    balance: state.walletBalance
-  }));
-}, [state.cartItems, state.walletBalance]);
+// const walletHistory = useMemo(() => {
+//   return state.cartItems.map(item => ({
+//     id: item.id,
+//     date: new Date().toLocaleDateString("en-IN", {
+//       day: "2-digit", month: "short", year: "numeric"
+//     }),
+//     description: item.title,
+//     amount: -safeNumber(item.price),
+//     balance: state.walletBalance
+//   }));
+// }, [state.cartItems, state.walletBalance]);
 
-const coinHistory = useMemo(() => {
-  return state.cartItems.map(item => ({
-    id: item.id,
-    date: new Date().toLocaleDateString("en-IN", {
-      day: "2-digit", month: "short", year: "numeric"
-    }),
-    description: item.title,
-    coins: -safeNumber(item.coins),
-    balance: state.coinBalance
-  }));
-}, [state.cartItems, state.coinBalance]);
+// const coinHistory = useMemo(() => {
+//   return state.cartItems.map(item => ({
+//     id: item.id,
+//     date: new Date().toLocaleDateString("en-IN", {
+//       day: "2-digit", month: "short", year: "numeric"
+//     }),
+//     description: item.title,
+//     coins: -safeNumber(item.coins),
+//     balance: state.coinBalance
+//   }));
+// }, [state.cartItems, state.coinBalance]);
 
 
   // ----------------------------
@@ -108,109 +111,116 @@ const coinHistory = useMemo(() => {
   // -----------------------------------------
   // ✅ ADD TO CART (DEDUCT WALLET + COINS + LEDGER)
   // -----------------------------------------
-  const addToCart = (item) => {
-    if (!item?.id) return;
+  // const addToCart = (item) => {
+  //   if (!item?.id) return;
 
-    setState((prev) => {
-      // Prevent duplicates
-      if (prev.cartItems.some((x) => x.id === item.id)) return prev;
+  //   setState((prev) => {
+  //     // Prevent duplicates
+  //     if (prev.cartItems.some((x) => x.id === item.id)) return prev;
 
-      const price = safeNumber(item.price); // ₹
-      const coins = safeNumber(item.coins); // 🪙
+  //     const price = safeNumber(item.price); // ₹
+  //     const coins = safeNumber(item.coins); // 🪙
 
-      const nextWallet = prev.walletBalance - price;
-      const nextCoins = prev.coinBalance - coins;
+  //     const nextWallet = prev.walletBalance - price;
+  //     const nextCoins = prev.coinBalance - coins;
 
-      const dateStr = new Date().toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      });
+  //     const dateStr = new Date().toLocaleDateString("en-IN", {
+  //       day: "2-digit",
+  //       month: "short",
+  //       year: "numeric"
+  //     });
 
       
 
-      return {
-        ...prev,
-        walletBalance: nextWallet,
-        coinBalance: nextCoins,
-        cartItems: [
-          ...prev.cartItems,
-          {
-            ...item,
-            price,
-            coins
-          }
-        ]
-      };
-    });
-  };
+  //     return {
+  //       ...prev,
+  //       walletBalance: nextWallet,
+  //       coinBalance: nextCoins,
+  //       cartItems: [
+  //         ...prev.cartItems,
+  //         {
+  //           ...item,
+  //           price,
+  //           coins
+  //         }
+  //       ]
+  //     };
+  //   });
+  // };
+
+const addToCart = (item) => {
+  setState(prev => {
+    if (prev.cartItems.some(x => x.id === item.id)) return prev;
+
+    const price = safeNumber(item.price);
+    const coins = safeNumber(item.coins);
+
+    const nextWallet = prev.walletBalance - price;
+    const nextCoins = prev.coinBalance - coins;
+
+    const date = new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+
+    return {
+      ...prev,
+      walletBalance: nextWallet,
+      coinBalance: nextCoins,
+      cartItems: [...prev.cartItems, item],
+
+      walletHistory: [
+        { id: Date.now(), date, description: item.title, amount: -price, balance: nextWallet },
+        ...prev.walletHistory
+      ],
+
+      coinHistory: coins ? [
+        { id: Date.now()+1, date, description: item.title, coins: -coins, balance: nextCoins },
+        ...prev.coinHistory
+      ] : prev.coinHistory
+    };
+  });
+};
+
+
 
   // -----------------------------------------
   // ✅ REMOVE FROM CART (RESTORE WALLET + COINS + LEDGER)
   // -----------------------------------------
   const removeFromCart = (id) => {
-    setState((prev) => {
-      const idx = prev.cartItems.findIndex((x) => x.id === id);
-      if (idx === -1) return prev;
+  setState(prev => {
+    const removed = prev.cartItems.find(x => x.id === id);
+    if (!removed) return prev;
 
-      const removed = prev.cartItems[idx];
-      const price = safeNumber(removed.price);
-      const coins = safeNumber(removed.coins);
+    const price = safeNumber(removed.price);
+    const coins = safeNumber(removed.coins);
 
-      const nextWallet = prev.walletBalance + price;
-      const nextCoins = prev.coinBalance + coins;
+    const nextWallet = prev.walletBalance + price;
+    const nextCoins = prev.coinBalance + coins;
 
-      const dateStr = new Date().toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      });
+    const date = new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
 
-      // ✅ Wallet refund txn
-      const walletTxn = {
-        id: Date.now(),
-        date: dateStr,
-        description: `Refund - ${removed.title}`,
-        amount: price,
-        balance: nextWallet
-      };
+    return {
+      ...prev,
+      walletBalance: nextWallet,
+      coinBalance: nextCoins,
+      cartItems: prev.cartItems.filter(x => x.id !== id),
 
-      // ✅ Coin refund txn (only if coins > 0)
-      const coinTxn =
-        coins > 0
-          ? {
-              id: Date.now() + 1,
-              date: dateStr,
-              description: `Refund - ${removed.title}`,
-              coins: coins,
-              balance: nextCoins
-            }
-          : null;
+      walletHistory: [
+        { id: Date.now(), date, description:`Refund - ${removed.title}`, amount: price, balance: nextWallet },
+        ...prev.walletHistory
+      ],
 
-      return {
-        ...prev,
-        walletBalance: nextWallet,
-        coinBalance: nextCoins,
-        cartItems: prev.cartItems.filter((x) => x.id !== id),
-        walletHistory: [walletTxn, ...prev.walletHistory],
-        coinHistory: coinTxn ? [coinTxn, ...prev.coinHistory] : prev.coinHistory
-      };
-    });
-  };
+      coinHistory: coins ? [
+        { id: Date.now()+1, date, description:`Refund - ${removed.title}`, coins: coins, balance: nextCoins },
+        ...prev.coinHistory
+      ] : prev.coinHistory
+    };
+  });
+};
+
 
   const clearCart = () => {
-    setState((prev) => {
-      const restoreAmount = prev.cartItems.reduce((s, x) => s + safeNumber(x.price), 0);
-      const restoreCoins = prev.cartItems.reduce((s, x) => s + safeNumber(x.coins), 0);
+  setState(prev => ({ ...prev, cartItems: [] }));
+};
 
-      return {
-        ...prev,
-        walletBalance: prev.walletBalance + restoreAmount,
-        coinBalance: prev.coinBalance + restoreCoins,
-        cartItems: []
-      };
-    });
-  };
 
   // -----------------------------------------
   // ✅ Totals (derived)
@@ -235,10 +245,10 @@ const coinHistory = useMemo(() => {
     removeFromCart,
     clearCart,
     isAdded,
-    walletHistory,
-    coinHistory
+    walletHistory: state.walletHistory,
+coinHistory: state.coinHistory
   }),
-  [state, totals, walletHistory, coinHistory]
+  [state, totals]
 );
 
 
