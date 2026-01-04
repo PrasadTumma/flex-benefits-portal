@@ -59,7 +59,8 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
         <Divider sx={{ my: 2 }} />
 
         {/* GROUP INSURANCE */}
-<Typography fontWeight={700} mb={1}><u>GROUP INSURANCE BENEFITS:</u></Typography>
+<Typography fontWeight={600} fontSize={12} mb={1}>
+<u>GROUP INSURANCE BENEFITS:</u></Typography>
 
 {group.length === 0 ? (
   <Typography variant="caption">Not Selected</Typography>
@@ -81,7 +82,8 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
         <Divider sx={{ my: 2 }} />
 
         {/* WELLNESS */}
-        <Typography fontWeight={700} mb={1}><u>WELLNESS BENEFITS:</u></Typography>
+       <Typography fontWeight={600} fontSize={12} mb={1}>
+<u>WELLNESS BENEFITS:</u></Typography>
         {wellness.length === 0 ? (
           <Typography variant="caption">Not Selected</Typography>
         ) : wellness.map(item => (
@@ -109,7 +111,8 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
 
         {/* PERSONAL */}
         
-        <Typography fontWeight={700} mb={1}><u>PERSONAL INSURANCE BENEFITS:</u></Typography>
+       <Typography fontWeight={600} fontSize={12} mb={1}>
+<u>PERSONAL INSURANCE BENEFITS:</u></Typography>
         {personal.length === 0 ? (
           <Typography variant="caption">Not Selected</Typography>
         ) : personal.map(item => (
@@ -135,7 +138,13 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
         <Divider sx={{ my: 2 }} />
 
         {/* PRICE SUMMARY */}
-        <Typography fontWeight={700}><u>TOTAL PRICE SUMMARY:</u></Typography>
+        <Typography
+  fontWeight={800}
+  sx={{ color: "#2E7D32", fontSize: 15 }}
+>
+  TOTAL PRICE SUMMARY:
+</Typography>
+
         <Stack spacing={0.5}>
 
   <Typography variant="caption">
@@ -172,17 +181,21 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
        <Button
   fullWidth
   variant="contained"
-  sx={{ mt: 2, bgcolor:"#003E8C" }}
-  onClick={() => {
-    setPayStep("REDIRECT");
-    setPayOpen(true);
-
-    setTimeout(() => setPayStep("SUCCESS"), 1000);
-    setTimeout(() => {
-      setPayOpen(false);
-      toggleCart();
-    }, 2500);
+  disabled={totals.totalAmount === 0 && totals.totalCoins === 0}
+  sx={{
+    mt: 2,
+    bgcolor: "#003E8C",
+    opacity: totals.totalAmount === 0 && totals.totalCoins === 0 ? 0.4 : 1
   }}
+  onClick={() => {
+  setPayStep("SUCCESS");
+  setPayOpen(true);
+
+  setTimeout(() => {
+    setPayOpen(false);
+    toggleCart();
+  }, 2000);
+}}
 >
   CONFIRM & PROCEED
 </Button>
@@ -193,17 +206,11 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
       <Dialog open={payOpen} maxWidth="xs" fullWidth>
   <DialogContent sx={{ textAlign:"center", py:5 }}>
 
-    {payStep === "REDIRECT" && (
-      <>
-        <CircularProgress />
-        <Typography mt={2} fontWeight={600}>
-          Redirecting to Payment Gateway...
-        </Typography>
-      </>
-    )}
+   
 
     {payStep === "SUCCESS" && (
       <>
+      
         <CheckCircleIcon sx={{ fontSize:60, color:"#4CAF50" }} />
         <Typography mt={2} fontWeight={700}>
           Order Placed Successfully 🎉
