@@ -184,41 +184,32 @@ const addToCart = (item) => {
   // -----------------------------------------
   // ✅ REMOVE FROM CART (RESTORE WALLET + COINS + LEDGER)
   // -----------------------------------------
-  const removeFromCart = (id) => {
-  setState(prev => {
-    const removed = prev.cartItems.find(x => x.id === id);
+const removeFromCart = (id) => {
+  setState((prev) => {
+    const removed = prev.cartItems.find((x) => x.id === id);
     if (!removed) return prev;
 
     const price = safeNumber(removed.price);
     const coins = safeNumber(removed.coins);
 
-    const nextWallet = prev.walletBalance + price;
-    const nextCoins = prev.coinBalance + coins;
-
-    const date = new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
-
     return {
       ...prev,
-      walletBalance: nextWallet,
-      coinBalance: nextCoins,
-      cartItems: prev.cartItems.filter(x => x.id !== id),
-
-      walletHistory: [
-        { id: Date.now(), date, description:`Refund - ${removed.title}`, amount: price, balance: nextWallet },
-        ...prev.walletHistory
-      ],
-
-      coinHistory: coins ? [
-        { id: Date.now()+1, date, description:`Refund - ${removed.title}`, coins: coins, balance: nextCoins },
-        ...prev.coinHistory
-      ] : prev.coinHistory
+      walletBalance: prev.walletBalance + price,
+      coinBalance: prev.coinBalance + coins,
+      cartItems: prev.cartItems.filter((x) => x.id !== id),
+      // ✅ IMPORTANT: No walletHistory / coinHistory updates here
     };
   });
 };
 
 
-  const clearCart = () => {
-  setState(prev => ({ ...prev, cartItems: [] }));
+
+const clearCart = () => {
+  setState((prev) => ({
+    ...prev,
+    cartItems: [],
+    cartOpen: false // optional: closes cart too
+  }));
 };
 
 

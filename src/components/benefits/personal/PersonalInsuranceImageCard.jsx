@@ -7,8 +7,13 @@ import {
   FormControlLabel,
   Radio,
   Select,
-  MenuItem
+  MenuItem,
+  Dialog,
+  DialogContent,
+  TextField
 } from "@mui/material";
+import { useFlexBenefits } from "../../../context/FlexBenefitsContext";
+
 import CoinIcon from "../../../assets/images/coin.svg";
 
 const PersonalInsuranceImageCard = ({ data, inCart, onAdd, onView, isMotor }) => {
@@ -23,6 +28,7 @@ const PersonalInsuranceImageCard = ({ data, inCart, onAdd, onView, isMotor }) =>
 
   const [buyer, setBuyer] = useState(buyingOptions[0]);
   const [cover, setCover] = useState(coverOptions[0]);
+const { addToCart, isAdded } = useFlexBenefits();
 
   useEffect(() => {
     setBuyer(buyingOptions[0]);
@@ -38,7 +44,11 @@ const PersonalInsuranceImageCard = ({ data, inCart, onAdd, onView, isMotor }) =>
 const title = (data.title || "").toLowerCase();
 const isCar = title.includes("car");
 const isBike = title.includes("two") || title.includes("bike") || title.includes("wheeler");
- 
+ const [openStep1, setOpenStep1] = useState(false);
+const [openStep2, setOpenStep2] = useState(false);
+const [openStep3, setOpenStep3] = useState(false);
+
+
 
 const handleMotorRedirect = () => {
   if (isCar) {
@@ -151,35 +161,35 @@ const handleMotorRedirect = () => {
       </Box>
 
       {/* CTA */}
-      {isMotor ? (
+ {isMotor ? (
   <Button
     fullWidth
-    sx={{ bgcolor: "#003E8C", color: "#fff", py: 1.5, borderRadius: 0 }}
-    onClick={() => {
-      const t = data.title.toLowerCase();
-      if (t.includes("car"))
-        window.open("https://elephant.in/motor-insurance/car-insurance", "_blank");
-      else
-        window.open("https://elephant.in/motor-insurance/two-wheeler-insurance", "_blank");
+    disabled={isAdded(data.id)}
+    sx={{
+      bgcolor: isAdded(data.id) ? "#ccc" : "#ff6a00",
+      color: "#fff",
+      py: 1.5
     }}
+    onClick={() => setOpenStep1(true)}
   >
-    BUY NOW
+    {isAdded(data.id) ? "UNLOCKED" : "UNLOCK NOW"}
   </Button>
 ) : inCart ? (
-  <Button fullWidth sx={{ bgcolor: "#000", color: "#fff", py: 1.5 }} onClick={onView}>
+  <Button fullWidth sx={{ bgcolor:"#000", color:"#fff", py:1.5 }} onClick={onView}>
     VIEW CART
   </Button>
 ) : isUnlock ? (
-  <Button fullWidth sx={{ bgcolor: "#ff6a00", color: "#fff", py: 1.5 }}
-    onClick={() => onAdd({ ...data, price: 0, coins: 400, type: "personal" })}>
+  <Button fullWidth sx={{ bgcolor:"#ff6a00", color:"#fff", py:1.5 }}
+    onClick={() => onAdd({ ...data, price:0, coins:400, type:"personal" })}>
     UNLOCK NOW
   </Button>
 ) : (
-  <Button fullWidth sx={{ bgcolor: "#ff6a00", color: "#fff", py: 1.5 }}
-    onClick={() => onAdd({ ...data, cover, price: premium, coins: 400, type: "personal" })}>
+  <Button fullWidth sx={{ bgcolor:"#ff6a00", color:"#fff", py:1.5 }}
+    onClick={() => onAdd({ ...data, cover, price: premium, coins:400, type:"personal" })}>
     ADD TO CART ₹{premium}
   </Button>
 )}
+
 
 
       {/* COINS FOOTER */}
@@ -199,6 +209,59 @@ const handleMotorRedirect = () => {
   <Box component="img" src={CoinIcon} sx={{ width: 14, height: 14 }} />
   400
 </Box>
+
+<Dialog open={openStep1} onClose={()=>setOpenStep1(false)} maxWidth="xs" fullWidth>
+<DialogContent>
+<Typography fontWeight={700}>To proceed with unlock exclusive offer</Typography>
+<TextField fullWidth label="Car Registration Number" defaultValue="AP-07-BE-9908" sx={{mt:2}}/>
+<RadioGroup row defaultValue="No" sx={{mt:2}}>
+<FormControlLabel value="No" control={<Radio/>} label="No"/>
+<FormControlLabel value="Yes" control={<Radio/>} label="Yes"/>
+</RadioGroup>
+<TextField fullWidth label="Expiry Date" defaultValue="12/12/2025" sx={{mt:2}}/>
+
+<Button fullWidth sx={{mt:2, bgcolor:"#ff6a00", color:"#fff"}} onClick={()=>{
+setOpenStep1(false); setOpenStep2(true);
+}}>NEXT</Button>
+</DialogContent>
+</Dialog>
+
+<Dialog open={openStep2} maxWidth="xs" fullWidth>
+<DialogContent sx={{textAlign:"center"}}>
+<Typography fontWeight={700}>Congratulations!!!</Typography>
+<Typography>Unlocked up to 95% discount</Typography>
+<Button fullWidth sx={{mt:2, bgcolor:"#ff6a00", color:"#fff"}}
+onClick={()=>{setOpenStep2(false); setOpenStep3(true);}}>NEXT</Button>
+</DialogContent>
+</Dialog>
+
+<Dialog open={openStep3} maxWidth="xs" fullWidth>
+<DialogContent sx={{textAlign:"center"}}>
+<Typography>Redirecting to Elephant.in</Typography>
+<Button
+  fullWidth
+  sx={{ mt:2, bgcolor:"#ff6a00", color:"#fff" }}
+  onClick={() => {
+    addToCart({ ...data, price:0, coins:400, type:"personal" });
+
+    setOpenStep3(false);
+
+    setTimeout(() => {
+      window.open(
+        isCar
+          ? "https://elephant.in/motor-insurance/car-insurance"
+          : "https://elephant.in/motor-insurance/two-wheeler-insurance",
+        "_blank"
+      );
+    }, 300);
+  }}
+>
+PROCEED
+</Button>
+
+</DialogContent>
+</Dialog>
+
 
     </Box>
   );

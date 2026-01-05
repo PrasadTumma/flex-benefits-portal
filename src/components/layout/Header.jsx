@@ -6,8 +6,7 @@ import {
   Stack,
   Avatar,
   IconButton,
-    Divider        // ✅ add this
-
+  Divider, // ✅ add this
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import WalletIcon from "../../assets/images/wallet.svg";
@@ -45,20 +44,24 @@ const Header = () => {
 
   const ClientLogo = clientLogoMap[client] || SuzlonLogo;
 
-  const { walletBalance, coinBalance, cartItems, toggleCart, walletHistory,coinHistory  } =
-  useFlexBenefits();
- 
-// Running balance calc
-// const totalUsed = coinHistory.reduce((s, x) => s + x.coins, 0);
-// let runningBalance = coinBalance + totalUsed;
+  const {
+    walletBalance,
+    coinBalance,
+    cartItems,
+    toggleCart,
+    walletHistory,
+    coinHistory,
+  } = useFlexBenefits();
 
-
+  // Running balance calc
+  // const totalUsed = coinHistory.reduce((s, x) => s + x.coins, 0);
+  // let runningBalance = coinBalance + totalUsed;
 
   const handleLogout = () => {
-  localStorage.removeItem("eb360_logged_in");
-  localStorage.removeItem("eb360_client");
-  navigate("/", { replace: true });
-};
+    localStorage.removeItem("eb360_logged_in");
+    localStorage.removeItem("eb360_client");
+    navigate("/", { replace: true });
+  };
 
   const employee = CLIENT_EMPLOYEE_MAP[client];
 
@@ -169,147 +172,173 @@ const Header = () => {
         </Stack>
       </Container>
       {/* WALLET POPUP */}
-<Dialog open={openWallet} onClose={() => setOpenWallet(false)} maxWidth="xs" fullWidth
-  PaperProps={{
-    sx: {
-      position: "fixed",
-      top: 90,                 // below header
-      left: "50%",
-      transform: "translateX(-50%)"
-    }
-  }}>
-  <DialogTitle>
-    Wallet History
-    <IconButton onClick={() => setOpenWallet(false)} sx={{ position:"absolute", right:8, top:8 }}>
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+      <Dialog
+        open={openWallet}
+        onClose={() => setOpenWallet(false)}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            position: "fixed",
+            top: 90, // below header
+            left: "50%",
+            transform: "translateX(-50%)",
+          },
+        }}
+      >
+        <DialogTitle>
+          Wallet History
+          <IconButton
+            onClick={() => setOpenWallet(false)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
-  <DialogContent>
-    <Box sx={{ bgcolor:"#E6F7FB", p:2, borderRadius:2, mb:2 }}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography>Wallet Balance</Typography>
-        <Typography fontWeight={700}>₹{walletBalance}</Typography>
-      </Stack>
-      
-    </Box>
+        <DialogContent>
+          <Box sx={{ bgcolor: "#E6F7FB", p: 2, borderRadius: 2, mb: 2 }}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography>Wallet Balance</Typography>
+              <Typography fontWeight={700}>₹{walletBalance}</Typography>
+            </Stack>
+          </Box>
 
-    <Box mt={2}>
-  <Stack direction="row" fontWeight={600} fontSize={12} mb={1}>
-    <Box flex={1}>Date</Box>
-    <Box flex={2}>Plan</Box>
-    <Box flex={1}>Amount</Box>
-    <Box flex={1}>Balance</Box>
-  </Stack>
+          <Box mt={2}>
+            <Stack direction="row" fontWeight={600} fontSize={12} mb={1}>
+              <Box flex={1}>Date</Box>
+              <Box flex={2}>Plan</Box>
+              <Box flex={1}>Amount</Box>
+              <Box flex={1}>Balance</Box>
+            </Stack>
+            {[...walletHistory]
+              .sort((a, b) => b.id - a.id) // newest first
+              .map((txn) => (
+                <Stack
+                  key={txn.id}
+                  direction="row"
+                  fontSize={11}
+                  py={0.7}
+                  borderBottom="1px dashed #ddd"
+                >
+                  <Box flex={1}>{txn.date}</Box>
+                  <Box flex={2}>{txn.description}</Box>
+                  <Box flex={1} color="green">
+                    ₹{Math.abs(txn.amount)}
+                  </Box>
+                  <Box flex={1}>₹{txn.balance}</Box>
+                </Stack>
+              ))}
+          </Box>
+        </DialogContent>
+      </Dialog>
 
-  {walletHistory.map(txn => (
-    <Stack
-      key={txn.id}
-      direction="row"
-      fontSize={11}
-      py={.7}
-      borderBottom="1px dashed #ddd"
-    >
-      <Box flex={1}>{txn.date}</Box>
-      <Box flex={2}>{txn.description}</Box>
-      <Box flex={1} color="green">₹{Math.abs(txn.amount)}</Box>
-      <Box flex={1}>₹{txn.balance}</Box>
-    </Stack>
-  ))}
-</Box>
+      {/* COINS POPUP */}
+      <Dialog
+        open={openCoins}
+        onClose={() => setOpenCoins(false)}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            position: "fixed",
+            top: 90, // below header
+            left: "50%",
+            transform: "translateX(-50%)",
+          },
+        }}
+      >
+        <DialogTitle>
+          Benefits Coins History
+          <IconButton
+            onClick={() => setOpenCoins(false)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
-  </DialogContent>
-</Dialog>
+        <Dialog
+          open={openCoins}
+          onClose={() => setOpenCoins(false)}
+          maxWidth="sm"
+          fullWidth
+          PaperProps={{
+            sx: {
+              position: "fixed",
+              top: 90,
+              left: "50%",
+              transform: "translateX(-50%)",
+              borderRadius: 3,
+            },
+          }}
+        >
+          <DialogTitle>
+            Benefits Coins History
+            <IconButton
+              onClick={() => setOpenCoins(false)}
+              sx={{ position: "absolute", right: 10, top: 10 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
 
+          <DialogContent>
+            {/* Summary */}
+            <Box sx={{ bgcolor: "#E6F7FB", p: 2, borderRadius: 2, mb: 2 }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Box component="img" src={CoinIcon} sx={{ width: 18 }} />
+                  <Typography>Coins Balance</Typography>
+                </Stack>
+                <Typography fontWeight={700}>
+                  {coinBalance.toLocaleString()}
+                </Typography>
+              </Stack>
+            </Box>
 
-{/* COINS POPUP */}
-<Dialog open={openCoins} onClose={() => setOpenCoins(false)} maxWidth="xs" fullWidth
-  PaperProps={{
-    sx: {
-      position: "fixed",
-      top: 90,                 // below header
-      left: "50%",
-      transform: "translateX(-50%)"
-    }
-  }}>
-  <DialogTitle>
-    Benefits Coins History
-    <IconButton onClick={() => setOpenCoins(false)} sx={{ position:"absolute", right:8, top:8 }}>
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+            {/* Table Header */}
+            <Stack
+              direction="row"
+              fontWeight={700}
+              fontSize={12}
+              sx={{ color: "#555", mb: 1 }}
+            >
+              <Box width="25%">Date</Box>
+              <Box width="35%">Description</Box>
+              <Box width="20%">Coins</Box>
+              <Box width="20%">Balance</Box>
+            </Stack>
+            <Divider sx={{ mb: 1 }} />
 
-  <Dialog open={openCoins} onClose={() => setOpenCoins(false)} maxWidth="sm" fullWidth
-  PaperProps={{
-    sx: {
-      position: "fixed",
-      top: 90,
-      left: "50%",
-      transform: "translateX(-50%)",
-      borderRadius: 3
-    }
-  }}>
-
-  <DialogTitle>
-    Benefits Coins History
-    <IconButton onClick={() => setOpenCoins(false)} sx={{ position: "absolute", right: 10, top: 10 }}>
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
-
-  <DialogContent>
-
-    {/* Summary */}
-    <Box sx={{ bgcolor:"#E6F7FB", p:2, borderRadius:2, mb:2 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Box component="img" src={CoinIcon} sx={{ width: 18 }} />
-          <Typography>Coins Balance</Typography>
-        </Stack>
-        <Typography fontWeight={700}>{coinBalance.toLocaleString()}</Typography>
-      </Stack>
-    </Box>
-
-    {/* Table Header */}
-    <Stack direction="row" fontWeight={700} fontSize={12} sx={{ color:"#555", mb:1 }}>
-      <Box width="25%">Date</Box>
-      <Box width="35%">Description</Box>
-      <Box width="20%">Coins</Box>
-      <Box width="20%">Balance</Box>
-    </Stack>
-    <Divider sx={{ mb:1 }} />
-
-    {/* Table Rows */}
-    {coinHistory.length === 0 ? (
+            {/* Table Rows */}
+            {coinHistory.length === 0 ? (
   <Typography variant="caption" color="text.secondary">
     No transactions yet
   </Typography>
 ) : (
-  coinHistory.map(txn => {
-    
-
-    return (
-      
+  [...coinHistory]
+    .sort((a, b) => b.id - a.id)   // newest first
+    .map(txn => (
       <Stack key={txn.id} direction="row" fontSize={12} py={0.7}>
-    <Box width="25%">{txn.date}</Box>
-    <Box width="35%">{txn.description}</Box>
-    <Box width="20%" color="green">
-      {txn.coins}
-    </Box>
-    <Box width="20%">{txn.balance}</Box>
-  </Stack>
-    );
-  })
+        <Box width="25%">{txn.date}</Box>
+        <Box width="35%">{txn.description}</Box>
+        <Box width="20%" color="green">
+          {txn.coins}
+        </Box>
+        <Box width="20%">{txn.balance}</Box>
+      </Stack>
+    ))
 )}
 
-
-  </DialogContent>
-</Dialog>
-
-</Dialog>
-
+          </DialogContent>
+        </Dialog>
+      </Dialog>
     </Box>
-    
   );
 };
 

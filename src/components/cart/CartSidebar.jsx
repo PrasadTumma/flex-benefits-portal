@@ -22,8 +22,6 @@ const CartSidebar = () => {
     toggleCart,
     cartItems,
     removeFromCart,
-    walletBalance,
-    coinBalance,
     totals,
     clearCart    
   } = useFlexBenefits();
