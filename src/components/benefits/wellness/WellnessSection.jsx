@@ -37,7 +37,7 @@ const WellnessSection = () => {
                   price: Number(b.price) || 0,
                   coins: Number(b.coins) || 0
                 });
-                toggleCart();
+                //toggleCart();
               }}
               onView={toggleCart}
             />

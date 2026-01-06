@@ -41,7 +41,7 @@ const PersonalInsuranceSection = () => {
         onAdd={(item) => {
           if (isMotor) return;       // 🚫 Block motor from cart
           addToCart(item);
-          toggleCart();
+          //toggleCart();
         }}
         onView={toggleCart}
         isMotor={isMotor}           // 🔐 Pass motor flag to card

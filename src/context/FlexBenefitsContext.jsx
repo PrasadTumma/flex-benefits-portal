@@ -66,6 +66,8 @@ export const FlexBenefitsProvider = ({ children }) => {
   // };
 
   // ✅ Restore state from localStorage
+ 
+ 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -99,6 +101,29 @@ export const FlexBenefitsProvider = ({ children }) => {
   // -----------------------------------------
   // Helpers
   // -----------------------------------------
+const pendingWalletHistory = useMemo(() => {
+  return state.cartItems.map(item => ({
+    id: item.id,
+    date: new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}),
+    description: item.title,
+    amount: -safeNumber(item.price),
+    balance: state.walletBalance
+  }));
+}, [state.cartItems, state.walletBalance]);
+
+const pendingCoinHistory = useMemo(() => {
+  return state.cartItems
+    .filter(x => safeNumber(x.coins) > 0)
+    .map(item => ({
+      id: item.id + "_coin",
+      date: new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}),
+      description: item.title,
+      coins: -safeNumber(item.coins),
+      balance: state.coinBalance
+    }));
+}, [state.cartItems, state.coinBalance]);
+
+
   const toggleCart = () => {
     setState((prev) => ({ ...prev, cartOpen: !prev.cartOpen }));
   };
@@ -155,26 +180,18 @@ const addToCart = (item) => {
     const price = safeNumber(item.price);
     const coins = safeNumber(item.coins);
 
-    const nextWallet = prev.walletBalance - price;
-    const nextCoins = prev.coinBalance - coins;
+    //const nextWallet = prev.walletBalance - price;
+    //const nextCoins = prev.coinBalance - coins;
 
     const date = new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
 
     return {
       ...prev,
-      walletBalance: nextWallet,
-      coinBalance: nextCoins,
+      walletBalance: prev.walletBalance - price,
+      coinBalance: prev.coinBalance - coins,
       cartItems: [...prev.cartItems, item],
 
-      walletHistory: [
-        { id: Date.now(), date, description: item.title, amount: -price, balance: nextWallet },
-        ...prev.walletHistory
-      ],
-
-      coinHistory: coins ? [
-        { id: Date.now()+1, date, description: item.title, coins: -coins, balance: nextCoins },
-        ...prev.coinHistory
-      ] : prev.coinHistory
+      
     };
   });
 };
@@ -198,6 +215,39 @@ const removeFromCart = (id) => {
       coinBalance: prev.coinBalance + coins,
       cartItems: prev.cartItems.filter((x) => x.id !== id),
       // ✅ IMPORTANT: No walletHistory / coinHistory updates here
+    };
+  });
+};
+const proceedCart = () => {
+  setState(prev => {
+    if (prev.cartItems.length === 0) return prev;
+
+    const date = new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+
+    const walletTxns = prev.cartItems.map(x => ({
+      id: Date.now() + Math.random(),
+      date,
+      description: x.title,
+      amount: -safeNumber(x.price),
+      balance: prev.walletBalance
+    }));
+
+    const coinTxns = prev.cartItems
+      .filter(x => safeNumber(x.coins) > 0)
+      .map(x => ({
+        id: Date.now() + Math.random(),
+        date,
+        description: x.title,
+        coins: -safeNumber(x.coins),
+        balance: prev.coinBalance
+      }));
+
+    return {
+      ...prev,
+      walletHistory: [...walletTxns, ...prev.walletHistory],
+      coinHistory: [...coinTxns, ...prev.coinHistory],
+      cartItems: [],
+      cartOpen: false
     };
   });
 };
@@ -245,6 +295,8 @@ coinHistory: state.coinHistory
 
   return <FlexBenefitsContext.Provider value={value}>{children}</FlexBenefitsContext.Provider>;
 };
+
+
 
 export const useFlexBenefits = () => {
   const ctx = useContext(FlexBenefitsContext);

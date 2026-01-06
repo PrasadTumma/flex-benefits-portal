@@ -242,7 +242,7 @@ onClick={()=>{setOpenStep2(false); setOpenStep3(true);}}>NEXT</Button>
   fullWidth
   sx={{ mt:2, bgcolor:"#ff6a00", color:"#fff" }}
   onClick={() => {
-    addToCart({ ...data, price:0, coins:400, type:"personal" });
+    //addToCart({ ...data, price:0, coins:400, type:"personal" });
 
     setOpenStep3(false);
 

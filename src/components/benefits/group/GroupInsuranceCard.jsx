@@ -32,7 +32,7 @@ const GroupInsuranceCard = ({ data }) => {
       coins: 0,
       type: "group"
     });
-    toggleCart();
+    //toggleCart();
   };
 
   const PlanRow = ({ title, cover, premium, tag }) => (

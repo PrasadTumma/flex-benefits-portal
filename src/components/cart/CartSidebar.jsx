@@ -23,7 +23,7 @@ const CartSidebar = () => {
     cartItems,
     removeFromCart,
     totals,
-    clearCart    
+    proceedCart    
   } = useFlexBenefits();
 
   const wellness = cartItems.filter(x => x.type === "wellness");
@@ -191,9 +191,11 @@ const [payStep, setPayStep] = React.useState("REDIRECT");
   setPayOpen(true);
 
   setTimeout(() => {
-    clearCart();
+    //clearCart();
     setPayOpen(false);
-    toggleCart();
+    proceedCart();
+
+    //toggleCart();
   }, 2000);
 }}
 >
